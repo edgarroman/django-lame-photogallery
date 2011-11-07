@@ -1,0 +1,27 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN"> 
+<html> 
+<head> 
+<title>{% block title %}My amazing site{% endblock %}</title>
+<LINK href="http://www.edgarroman.com/photos/website_photo.css" type=text/css rel=stylesheet>
+<link rel="stylesheet" href="{{ MEDIA_URL }}/css/menu_style.css" type="text/css" />
+</head> 
+<body>
+<!-------------------------------- header -------------------------->
+
+<ul id="menu">
+<li><a href="{% url home %}" target="_self" title="Newest Albums" {% block currenthomepage %}class=""{% endblock %}>Newest Albums</a></li>
+<li><a href="{% url album-list '0' %}" target="_self" title="Albums" {% block current-album-page %}class=""{% endblock %}>Albums</a></li>
+<li><a href="{% url album-list-by-year-years %}" target="_self" title="Albums by year" {% block current-album-by-year %}class=""{% endblock %}>Albums by Year</a></li>
+<li><a href="/tools/" target="_self" title="Tools">Tools, Login?</a></li>
+</ul>
+  
+<!-------------------------------- contents --------------------------> 
+<div id="Main-Content" > 
+        {% block content %}{% endblock %}
+</div>
+<!-------------------------------- footer --------------------------> 
+<DIV class="Page-Footer"> 
+	<P><FONT size=smaller>Copyright © 2011 Edgar Roman.</FONT></P> 
+</DIV> 
+</body> 
+</html>

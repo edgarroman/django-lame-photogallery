@@ -1,0 +1,21 @@
+   <div class="AlbumSummary"> 
+  	<h4 class="AlbumSummary-Date"> 
+	  {{ album.date }}	
+  	</h4> 
+  	<div class="AlbumSummary-Title"> 
+  		<a href="{% url album-view album.id %}"> 
+                {{ album.title }}
+  		</a> 
+  	</div> 
+  	<div class="AlbumSummary-Description"> 
+                {{ album.description }}
+  	</div> 
+  	<div class="AlbumSummary-Thumbnails">
+	       {% for thumbnail in album.photo_set.all|dictsort:"order"|slice:":3" %}
+		    <img src="{{ thumbnail.get_thumbnail_url }}">
+	       {% endfor %}
+  	</div> 
+  	<div class="AlbumSummary-NumberOfPictures"> 
+	       [{{ album.photo_set.count }} pictures]
+  	</div> 
+  </div> 

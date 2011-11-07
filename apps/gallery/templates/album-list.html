@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}edgarroman.com photo site: albums{% endblock %}
+{% block current-album-page %}class="current"{% endblock %}
+
+{% block content %}
+{% for album in albums %}
+   {% include "album-list-element.html" %} 
+{% endfor %}
+{% if next_page_id %}
+<h3>
+   <a href="{% url album-list next_page_id %}">
+   More Albums
+   </a>
+</h3>
+{% endif %}
+
+{% endblock %}

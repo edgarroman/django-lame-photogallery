@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}edgarroman.com photo site: albums{% endblock %}
+
+{% block content %}
+
+Select a year
+<ul>
+{% for album_year in album_dates %}
+   <li>
+   <a href="{% url album-list-by-year album_year.year %}">
+   {{ album_year.year }}
+   </a>
+   </li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+

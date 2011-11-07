@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}edgarroman.com photo site{% endblock %}
+
+{% block content %}
+<DIV id="Main-Content" >
+<div id="AlbumView">
+<h2>{{ album.title }}</h2>
+<h3>{{ album.description }}</h3>
+<style type="text/css">
+
+.AlbumRow {
+  overflow: auto;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.photobox {
+  float: left;
+  color: #ffffff;
+  width: 21%;
+}
+
+.photoboxdivider {
+  float: left;
+  width: 3%;
+}
+
+</style>
+{% for photo in album.photo_set.all %}
+   {% if forloop.first %}
+<div class="AlbumRow">
+   {% endif %}
+
+   {% include "photo-list-element.html" %} 
+
+   {% if forloop.counter|divisibleby:"4" %}
+</div> <!-- AlbumRow -->
+<div class="AlbumRow">
+   {% endif %}
+ 
+{% endfor %}
+{% endblock %}

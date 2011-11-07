@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}edgarroman.com photo site{% endblock %}
+{% block currenthomepage %}class="current"{% endblock %}
+
+{% block content %}
+<h3>Newest Albums</h3>
+
+{% for album in albums %}
+   {% include "album-list-element.html" %} 
+{% endfor %}
+<h3>
+   <a href="{% url album-list "1" %}">
+   More Albums
+   </a>
+</h3>
+{% endblock %}
