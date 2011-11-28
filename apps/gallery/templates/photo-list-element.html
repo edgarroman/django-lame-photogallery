@@ -1,6 +1,7 @@
+{% load thumbnail %}
     <div id="{{photo.id}}" class="photobox" >
       <a href="{% url photo-view photo.id %}">
-      <img src="{{ photo.get_thumbnail_url }}" width="100%"><br>
+        <img src="{% thumbnail photo.filename 200x200 crop %}" width="100%" alt="{{photo.title|escape}}"><br>
       </a>
       {{ photo.title }}
     </div>

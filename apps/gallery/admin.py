@@ -20,8 +20,8 @@ admin.site.register(Notification)
 
 class PhotoInline(admin.TabularInline):
     model = Photo
-    fields = ('id','order','title','datecreated')
-    readonly_fields = ('datecreated',)
+    fields = ('thumb', 'title', 'photodate','datecreated', 'order')
+    readonly_fields = ('thumb', 'photodate', 'datecreated',)
 #    date_hierarchy = 'datecreated'
 #    list_display = ('id','title','filename','order','datecreated')
 #    list_filter = ('album__title',)

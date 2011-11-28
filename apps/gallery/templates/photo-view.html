@@ -2,6 +2,7 @@
 
 {% block title %}edgarroman.com photo site{% endblock %}
 
+{% load thumbnail %}
 {% block content %}
 <DIV id="Main-Content" > 
  
@@ -19,7 +20,7 @@
       <script language="javascript"> 
 	    <!-- cache the next image
 	    ImageNext= new Image();
-	    ImageNext.src = "{{ photo.next_photo.get_medium_url }}"
+	    ImageNext.src = "{% thumbnail photo.filename 1000x1000 %}"
 	    //end hiding -->
       </script> 
       {% endif %}
@@ -29,8 +30,8 @@
 {{ photo.title }}
 </h2> 
 <div id="PhotoImage">
-      <a href="{{ photo.get_large_url }}">
-	    <img src="{{ photo.get_medium_url }}" >
+      <a href="{{ photo.filename.url }}">
+	    <img src="{% thumbnail photo.filename 1000x1000 %}" width="100%" alt="{{photo.title|escape}}">
       </a>
 </div> 
 <table  border=0> 

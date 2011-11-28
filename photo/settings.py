@@ -22,6 +22,13 @@ DATABASES = {
 
 ABS_ROOT_PATH = ''
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/home/edgarroman/photos.edgarroman.com/cache',
+    }
+}
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -102,8 +109,8 @@ INSTALLED_APPS = (
     'apps.gallery',
     #'apps.gallery',
 
-    # Apps needed for jquery multi-part upload    
     #'sorl.thumbnail',
+    'easy_thumbnails',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -113,6 +120,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
 )
+
+# Easy Thumbnail settings
+THUMBNAIL_DEBUG=True
+THUMBNAIL_SUBDIR='thumbs'
+
+THUMBSIZE = '200x200'
 
 try:
     from settings_local import *
