@@ -87,13 +87,13 @@ def album_view(request, album_id=None):
         return HttpResponseNotFound('No such album')
         
     album = Album.objects.get(id=album_id)
-#    photos = Photo.objects.order_by('order').filter(album=album_id)
+    photos = Photo.objects.order_by('order','photodate').filter(album=album_id)
 
     context = Context()
-#    context['photos'] = photos
+    context['photos'] = photos
     context['album'] = album
     request_context = RequestContext(request)
-    return render_to_response('album-view.html',
+    return render_to_response('mobile-album-view.html',
                               context,
                               request_context)
 
