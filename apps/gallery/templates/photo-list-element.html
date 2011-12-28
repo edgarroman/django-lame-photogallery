@@ -1,8 +1,6 @@
 {% load thumbnail %}
-    <div id="{{photo.id}}" class="photobox" >
-      <a href="{% url photo-view photo.id %}">
-        <img src="{% thumbnail photo.filename 200x200 crop %}" width="100%" alt="{{photo.title|escape}}"><br>
-      </a>
-      {{ photo.title }}
-    </div>
-    <div class="photoboxdivider">&nbsp;</div>
+<!--a href="{% url photo-view photo.id %}"-->
+<a href="{% thumbnail photo.filename 1000x1000 %}" rel="ocean_gallery" title="{{ photo.title|escape}}">
+<img src="{% thumbnail photo.filename 1000x1000 crop %}" width="100%" alt="{{photo.title|escape}}" /></a>
+<h3><a href="#">{{photo.title|escape}}</a></h3>
+<!--<p> description </p>-->

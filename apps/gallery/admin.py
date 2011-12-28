@@ -29,7 +29,8 @@ class PhotoInline(admin.TabularInline):
 
 class AlbumAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
-    list_display = ('id','title','date')
+    list_display = ('id','title','get_link','date')
+    search_fields = ['title']
     inlines = [
         PhotoInline
     ]

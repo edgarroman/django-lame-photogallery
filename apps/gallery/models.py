@@ -12,6 +12,7 @@ from django.conf import settings
 from datetime import datetime
 from os import unlink, error,path
 from easy_thumbnails.files import get_thumbnailer
+from django.core.urlresolvers import reverse
 
 import logging
 logging.basicConfig(filename='/home/edgarroman/photos.edgarroman.com/tmp/applog.log',level=logging.INFO)
@@ -45,6 +46,16 @@ class Album(models.Model):
     
     def __unicode__(self):
         return self.title
+    
+    def get_url(self):
+        return reverse('album-view', args=(self.id,))
+    get_url.short_description = 'Link to album'
+
+    def get_link(self):
+        link = reverse('album-view', args=(self.id,))
+        return '<a href="%s">%s</a>' % (link, link)
+    get_link.short_description = 'Link to album'
+    get_link.allow_tags = True
     
 class Photo(models.Model):
 #    id = models.BigIntegerField(primary_key=True)

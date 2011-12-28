@@ -59,7 +59,7 @@ def album_list(request, page_id='0'):
 
 def album_list_by_year(request, year=None):
 
-    albums = Album.objects.order_by('-date').filter(published='1',date__year=year)
+    albums = Album.objects.order_by('date').filter(published='1',date__year=year)
 
     context = Context()
     context['albums'] = albums
@@ -93,7 +93,7 @@ def album_view(request, album_id=None):
     context['photos'] = photos
     context['album'] = album
     request_context = RequestContext(request)
-    return render_to_response('mobile-album-view.html',
+    return render_to_response('album-view.html',
                               context,
                               request_context)
 
