@@ -119,6 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
+    'apps.gallery.context_processors.branding_variables',
 )
 
 # Easy Thumbnail settings
@@ -126,6 +127,11 @@ THUMBNAIL_DEBUG=True
 THUMBNAIL_SUBDIR='thumbs'
 
 THUMBSIZE = '200x200'
+
+BRAND_COPYRIGHT='Copyright (c) 2012 Edgar Roman. All Rights Reserved.'
+BRAND_SITE_TITLE='edgarroman.com'
+BRAND_LOGO='logo.png'
+BRAND_GA_CODE = ''
 
 try:
     from settings_local import *

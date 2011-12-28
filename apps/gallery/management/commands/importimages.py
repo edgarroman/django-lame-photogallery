@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from apps.gallery.models import Photo, Photo2
+from apps.gallery.models import Photo
 from django.core.files import File  
 from django.conf import settings
 
