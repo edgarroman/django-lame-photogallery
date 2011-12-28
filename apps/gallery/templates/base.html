@@ -44,6 +44,17 @@
 {% endif %}
 
 {% block additional_header_scripts %}{%endblock%}
+<style type="text/css">
+body {
+    {% if brand_background_image %}
+	background-image:url('{{ brand_background_image }}');
+    {% endif %}
+    {% if brand_background_color %}
+	background-color: {{ brand_background_color }};
+    {% endif %}
+}
+</style>
+
 </head>
 <body>
 	

@@ -132,6 +132,9 @@ BRAND_COPYRIGHT='Copyright (c) 2012 Edgar Roman. All Rights Reserved.'
 BRAND_SITE_TITLE='edgarroman.com'
 BRAND_LOGO='logo.png'
 BRAND_GA_CODE = ''
+BRAND_BACKGROUND_IMAGE = '../img/patterns/bg-2.png'
+BRAND_BACKGROUND_COLOR = '#0c2841'
+
 
 try:
     from settings_local import *

@@ -6,6 +6,8 @@ def branding_variables(request):
         'brand_title' : settings.BRAND_SITE_TITLE,
         'brand_logo' : settings.BRAND_LOGO,
         'brand_ga_code' : settings.BRAND_GA_CODE,
+        'brand_background_image' : settings.BRAND_BACKGROUND_IMAGE,
+        'brand_background_color' : settings.BRAND_BACKGROUND_COLOR,
     }
     return brand_dict
 
