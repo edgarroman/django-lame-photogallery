@@ -7,7 +7,8 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 import logging
-logging.basicConfig(filename='/home/edgarroman/photos.edgarroman.com/tmp/applog.log',level=logging.INFO)
+logfile = settings.TEMP_DIRECTORY + 'applog.log'
+logging.basicConfig(filename=logfile,level=logging.INFO)
 log = logging
 
 def main_page(request):
@@ -157,7 +158,8 @@ def accept_uploaded_photo(request, album_id):
     Parses data from jQuery plugin and makes database changes.
     """
     if request.method == 'POST':
-        log.info('received POST to main multiuploader view')
+        logid = random.randint(0,1000)
+        log.info('[%s] received POST to main multiuploader view' % logid)
         if request.FILES == None:
             return HttpResponseBadRequest('Must have files attached!')
 
@@ -166,12 +168,12 @@ def accept_uploaded_photo(request, album_id):
         wrapped_file = UploadedFile(file)
         filename = wrapped_file.name
         file_size = wrapped_file.file.size
-        log.info ('Got file: "%s"' % str(filename))
+        log.info ('[%s] Got file: "%s"' % (logid, str(filename)))
 
         # Write out file to disk as a temp file
-        randnumber = int(random.random() * 1000)
+        randnumber = logid # use the random number here too
         temp_filename = '%stmp%s_%s' % (settings.TEMP_DIRECTORY,randnumber, filename)
-        log.info('Writing out to: %s' % temp_filename)
+        log.info('[%s] Writing out to: %s' % (logid, temp_filename))
         destination = open(temp_filename, 'wb+')
         if wrapped_file.multiple_chunks():
             for chunk in wrapped_file.chunks():
@@ -192,7 +194,12 @@ def accept_uploaded_photo(request, album_id):
         orientation = None
         date_taken = None
         # Make full size and thumbsize
-        im = Image.open(temp_filename)
+        try:
+            im = Image.open(temp_filename)
+        except IOError:
+            log.info('[%s] Error opening file %s: %s %s' % (logid, temp_filename, e.errno, e))
+            return HttpResponseBadRequest('Could not read file')
+
         if hasattr( im, '_getexif' ):
             exifinfo = im._getexif()
             if exifinfo:
@@ -203,37 +210,56 @@ def accept_uploaded_photo(request, album_id):
 #                            log.info('Found tag: %s, value: %s' % (decoded,value))
                     if decoded == 'Orientation':
                         orientation = value
-                        log.info('Found tag: %s, value: %s' % (decoded,value))
+                        log.info('[%s] Found tag: %s, value: %s' % (logid,decoded,value))
                     elif decoded == 'DateTime':
                         date_taken =  datetime.strptime(value, "%Y:%m:%d %H:%M:%S")
-                        log.info('Found tag: %s, value: %s, date_taken=%s' % (decoded,value,date_taken))
+                        log.info('[%s] Found tag: %s, value: %s, date_taken=%s' % (logid,decoded,value,date_taken))
 
         # We rotate regarding to the EXIF orientation information
         if orientation:
             if orientation == 1:
                 # Nothing
+                log.info('[%s] Orientation: No rotation necessary' % logid)
                 pass
             elif orientation == 2:
                 # Vertical Mirror
+                log.info('[%s] Orientation: Vertical flip' % logid)
                 im = im.transpose(Image.FLIP_LEFT_RIGHT)
             elif orientation == 3:
                 # Rotation 180
+                log.info('[%s] Orientation: Rotation 180' % logid)
                 im = im.transpose(Image.ROTATE_180)
             elif orientation == 4:
                 # Horizontal Mirror
+                log.info('[%s] Orientation: Horizontal Mirror' % logid)
                 im = im.transpose(Image.FLIP_TOP_BOTTOM)
             elif orientation == 5:
                 # Horizontal Mirror + Rotation 270
+                log.info('[%s] Orientation: Flip top bottom, rot 270' % logid)
                 im = im.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
             elif orientation == 6:
                 # Rotation 270
+                log.info('[%s] Orientation: Rotate 270' % logid)
                 im = im.transpose(Image.ROTATE_270)
             elif orientation == 7:
                 # Vertical Mirror + Rotation 270
+                log.info('[%s] Orientation: Flip left right, rotate 270' % logid)
                 im = im.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_270)
             elif orientation == 8:
                 # Rotation 90
+                log.info('[%s] Orientation: Rotate 90' % logid)
                 im = im.transpose(Image.ROTATE_90)
+
+        #------------------
+        # Save the transposed image to disk
+        orig_path = '%stmp%s_mod%s' % (settings.TEMP_DIRECTORY,randnumber, filename)
+        # keep 100% fidelity on the image
+        try:
+            log.info('[%s] Writing corrected photo to path %s' % (logid,orig_path))
+            im.save(orig_path, "JPEG", quality=100)
+        except IOError:
+            log.info('[%s] Error saving file %s: %s %s' % (logid, orig_path, e.errno, e))
+            return HttpResponseBadRequest('Could not save file')
 
         #------------------
         # Save the photo object into the database
@@ -241,12 +267,13 @@ def accept_uploaded_photo(request, album_id):
         photo = Photo()
         photo.album = album
         
+        log.info('[%s] Determining photo order' % logid)
         #------------------
         # Determine where in the photo order this picture needs to be
         photo.order = 0
         if date_taken:
             photo.photodate = date_taken
-            log.info('Date Taken is %s' % date_taken)
+            log.info('[%s] Date Taken is %s' % (logid,date_taken))
             # Now try to insert the photo by date taken in the order list
             prev_photo = photo.prev_photo_by_photodate()
             if prev_photo:
@@ -259,23 +286,19 @@ def accept_uploaded_photo(request, album_id):
             # Last in album
             photo.order = album.photo_set.count() + 1
 
+        log.info('[%s] Writing photo entry to database' % logid)
         #------------------
         # Now finally write the entry to the db
         photo.save()
-        log.info('Photo object saved.  id = %s, order = %s' % (photo.id,photo.order))
+        log.info('[%s] Photo object saved.  id = %s, order = %s' % (logid, photo.id,photo.order))
         #album.reorder_photos()
-                    
-        #------------------
-        # Save the transposed image to the database
-        orig_path = '%stmp%s_mod%s' % (settings.TEMP_DIRECTORY,randnumber, filename)
-        # keep 100% fidelity on the image
-        im.save(orig_path, "JPEG", quality=100)
-        log.info('Writing corrected photo to path %s', orig_path)
         
+        log.info('[%s] Attempting to save file %s to django model id %s' % (logid, orig_path, photo.id))
         f = open(orig_path, 'r')        
         photo.filename.save('%s.jpg' % photo.id, File(f))
         f.close()
 
+        log.info('[%s] Cleaning up files' % logid)
         #clean up temp file
         unlink(temp_filename)
         unlink(orig_path)
