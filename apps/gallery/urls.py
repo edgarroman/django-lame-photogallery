@@ -14,4 +14,8 @@ urlpatterns = patterns('apps.gallery.views',
     url(r'^uploadphotointerface/(?P<album_id>\d+)/upload/$', 'accept_uploaded_photo', name='acceptuploadedphoto'),
 
     url(r'^test$', 'test'),
+    
+    url(r'^login/$', 'login', name='login'),
+    url(r'^login-error/$', 'loginerror', name='loginerror'),    
+    
 )

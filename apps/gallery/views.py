@@ -140,6 +140,24 @@ def upload_photo_interface(request, album_id=None):
                               context,
                               request_context)
 
+def login(request):
+    context = Context()
+    request_context = RequestContext(request)
+    return render_to_response('login.html',
+                              context,
+                              request_context)
+
+from social_auth import __version__ as version
+from django.contrib.messages.api import get_messages
+
+def loginerror(request):
+
+    messages = get_messages(request)
+    return render_to_response('loginerror.html', {'version': version,
+                                             'messages': messages},
+                              RequestContext(request))
+
+
 from django.core.files.uploadedfile import UploadedFile
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson

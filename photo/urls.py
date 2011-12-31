@@ -14,5 +14,7 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
     (r'^', include('apps.gallery.urls')),
+    
+    (r'', include('social_auth.urls')),
 
 )
