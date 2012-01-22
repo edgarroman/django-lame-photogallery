@@ -11,3 +11,9 @@ def branding_variables(request):
     }
     return brand_dict
 
+def user_vars(request):
+    user_vars = {
+        'login_url' : settings.LOGIN_URL,
+        
+    }
+    return user_vars

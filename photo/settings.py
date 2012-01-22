@@ -122,6 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     'apps.gallery.context_processors.branding_variables',
+    'apps.gallery.context_processors.user_vars',    
     'social_auth.context_processors.social_auth_by_type_backends',
 )
 
