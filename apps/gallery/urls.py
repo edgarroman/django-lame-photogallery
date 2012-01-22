@@ -16,6 +16,7 @@ urlpatterns = patterns('apps.gallery.views',
     url(r'^test$', 'test'),
     
     url(r'^login/$', 'login', name='login'),
+    url(r'^logout/$', 'logout', name='logout'),
     url(r'^login-error/$', 'loginerror', name='loginerror'),    
     
 )

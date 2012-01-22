@@ -72,7 +72,7 @@ body {
 			<li><a href="{% url home %}" target="_self" >Newest Albums</a> </li>
 			<li><a href="{% url album-list '0' %}" target="_self" >Albums</a></li>
 			<li><a href="{% url album-list-by-year-years %}" target="_self" >Albums by Year</a></li>
-			{% if user.is_authenticated %}
+			{% if user.is_authenticated and user.is_staff %}
 			<li><a href="#">Admin</a>				
 				<ul>
 					<li><a href="{% url admin:gallery_album_add %}">Add Album</a></li>
@@ -98,8 +98,10 @@ body {
 <!--- START COPYRIGHT -->
 <div class="container_16 copyright">
 		<h6>{{ brand_copyright }}</h6>
-		{% if not user.is_authenticated %}
-			<a href="/admin/login/?next={{request.path}}">Login</a>
+		{% if user.is_authenticated %}
+			<a href="{% url logout %}">Logout</a>
+		{% else %}
+			<a href="{{ settings.LOGIN_URL }}">Login</a>
 		{% endif %}
 </div><!--- .container_16 -->
 	

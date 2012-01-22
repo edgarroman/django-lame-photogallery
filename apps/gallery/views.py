@@ -147,6 +147,14 @@ def login(request):
                               context,
                               request_context)
 
+from django.contrib.auth import logout as auth_logout
+from django.shortcuts import redirect
+
+def logout(request):
+    auth_logout(request)
+    # Redirect to homepage.
+    return redirect('/')
+
 from social_auth import __version__ as version
 from django.contrib.messages.api import get_messages
 
