@@ -1,1 +1,9 @@
-This is my personal website code - it's not very impressive
+This is my personal website code.  It's django based and mostly an exercise
+for me to try out new techniques using django.
+
+Some notible features:
+- Social login using google
+- integration of jQuery-File-Upload https://github.com/blueimp/jQuery-File-Upload
+- Dynamic resizing of the images using thumbnails
+
+
