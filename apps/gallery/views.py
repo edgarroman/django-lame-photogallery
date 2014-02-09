@@ -29,7 +29,7 @@ def main_page(request):
     return render_to_response('homepage.html',
                               context,
                               request_context)
-    
+
 def album_list(request, page_id='0'):
 
     page_size = 10
@@ -38,12 +38,12 @@ def album_list(request, page_id='0'):
     end = start + page_size
 
     albums = Album.objects.order_by('-date').filter(published='1')[start:end]
-    
+
     if len(albums) <= 0:
         next_page_id = None
     else:
         next_page_id = page_id + 1
-    
+
     if page_id == 0:
         prev_page_id = None
     else:
@@ -86,7 +86,7 @@ def album_view(request, album_id=None):
 
     if not album_id:
         return HttpResponseNotFound('No such album')
-        
+
     album = Album.objects.get(id=album_id)
     photos = Photo.objects.order_by('order','photodate').filter(album=album_id)
 
@@ -98,27 +98,13 @@ def album_view(request, album_id=None):
                               context,
                               request_context)
 
-def mobile_album_view(request, album_id=None):
-
-    if not album_id:
-        return HttpResponseNotFound('No such album')
-        
-    album = Album.objects.get(id=album_id)
-
-    context = Context()
-    context['album'] = album
-    request_context = RequestContext(request)
-    return render_to_response('mobile-album-view.html',
-                              context,
-                              request_context)
-
 def photo_view(request, photo_id=None):
-    
+
     if not photo_id:
         return HttpResponseNotFound('No such photo')
 
     photo = Photo.objects.get(id=photo_id)
-    
+
     context = Context()
     context['photo'] = photo
 #    context['album'] = album
@@ -126,9 +112,9 @@ def photo_view(request, photo_id=None):
     return render_to_response('photo-view.html',
                               context,
                               request_context)
-    
+
 def upload_photo_interface(request, album_id=None):
-    
+
     if not album_id:
         return HttpResponseNotFound('No such album')
     album = Album.objects.get(id=album_id)
@@ -174,7 +160,7 @@ from shutil import copyfile
 from PIL import Image, ExifTags
 from datetime import datetime
 from os import unlink
-from django.core.files import File  
+from django.core.files import File
 from easy_thumbnails.files import get_thumbnailer
 
 @csrf_exempt
@@ -292,7 +278,7 @@ def accept_uploaded_photo(request, album_id):
         album = Album.objects.get(id=album_id)
         photo = Photo()
         photo.album = album
-        
+
         log.info('[%s] Determining photo order' % logid)
         #------------------
         # Determine where in the photo order this picture needs to be
@@ -307,7 +293,7 @@ def accept_uploaded_photo(request, album_id):
                 photo.order = prev_photo.order
             else:
                 # First in album
-                photo.order = 0               
+                photo.order = 0
         else:
             # Last in album
             photo.order = album.photo_set.count() + 1
@@ -318,9 +304,9 @@ def accept_uploaded_photo(request, album_id):
         photo.save()
         log.info('[%s] Photo object saved.  id = %s, order = %s' % (logid, photo.id,photo.order))
         #album.reorder_photos()
-        
+
         log.info('[%s] Attempting to save file %s to django model id %s' % (logid, orig_path, photo.id))
-        f = open(orig_path, 'r')        
+        f = open(orig_path, 'r')
         photo.filename.save('%s.jpg' % photo.id, File(f))
         f.close()
 
@@ -328,7 +314,7 @@ def accept_uploaded_photo(request, album_id):
         #clean up temp file
         unlink(temp_filename)
         unlink(orig_path)
-        
+
         #settings imports
         file_delete_url = 'multi_delete/'
 
@@ -337,14 +323,14 @@ def accept_uploaded_photo(request, album_id):
 
         #generating json response array
         result = []
-        result.append({"name":filename, 
-                       "size":file_size, 
-                       "url": thumb_url, 
+        result.append({"name":filename,
+                       "size":file_size,
+                       "url": thumb_url,
                        "thumbnail_url":thumb_url,
-                       "delete_url":'/', 
+                       "delete_url":'/',
                        "delete_type":"POST",})
         response_data = simplejson.dumps(result)
-        
+
         #checking for json data type
         #big thanks to Guy Shapiro
         if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
@@ -359,15 +345,15 @@ def accept_uploaded_photo(request, album_id):
 def test(request):
 
     log.info('Test received')
-    
+
     album = Album.objects.get(id='448')
     if album:
         log.info('Found Album: %s' % album.title)
         #album.reorder_photos()
     else:
         log.info('No Album found')
-        
-    
+
+
     return HttpResponse ('Test working!')
-    
- 
+
+
